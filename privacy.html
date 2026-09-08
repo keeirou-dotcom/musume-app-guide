@@ -31,6 +31,7 @@
   code{background:#EDE6F9; padding:2px 6px; border-radius:6px; font-size:0.88em; word-break:break-all;}
   footer{margin-top:44px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:13px;}
   a{color:#6B4E9E;}
+  @media (max-width:520px){ th{white-space:normal;} table{font-size:12.5px;} }
   @media (max-width:520px){
     body{font-size:14.5px; padding:24px 16px 48px;}
     th,td{padding:7px 8px;}
@@ -41,7 +42,7 @@
 
 <header>
   <h1>プライバシーポリシー</h1>
-  <p class="sub">まいにちサポート（Maimichi Support）／ 最終更新日：2026年9月8日</p>
+  <p class="sub">まいにちサポート（Maimichi Support）／ 最終更新日：2026年9月9日</p>
 </header>
 
 <div class="lead">
@@ -94,10 +95,12 @@
 <h3>カレンダーの表示（Google）</h3>
 <p>本アプリは、利用者ご自身のGoogleアカウントでログインしていただき、その権限の範囲でカレンダーの予定を読み取って画面に表示します。<strong>Googleから取得した情報は端末内での表示・整理にのみ使用し、開発者のサーバーへ送信することも、第三者へ提供することもありません。</strong>詳細は「4. Googleユーザーデータの取り扱い」をご覧ください。</p>
 
-<h3>天気情報（OpenWeatherMap）</h3>
+<h3>天気情報（開発者の中継サーバー経由／OpenWeatherMap）</h3>
 <p class="note" style="margin-top:8px;">
-<strong>この項目のみ、開発者名義のアカウントを使用します。</strong>天気を表示する際、端末のおおよその位置（緯度・経度）が、開発者名義のAPIキーを用いてOpenWeatherMap社へ送信されます。開発者が管理画面で確認できるのは全体の呼び出し回数のみで、どの利用者がいつどこにいたかを個別に知ることはできません。なお、送信される位置情報はOpenWeatherMap社のプライバシーポリシーに従って取り扱われます。
+<strong>この項目のみ、開発者が用意した中継サーバーとアカウントを使用します。</strong>天気を表示する際、端末のおおよその位置（緯度・経度）が、<strong>開発者が管理するCloudflare上の中継サーバー</strong>へ送信されます。中継サーバーは、その位置を<strong>小数第2位（約1km四方）に丸めたうえで</strong>、開発者名義のAPIキーを用いてOpenWeatherMap社へ問い合わせ、結果を端末へ返します。
 </p>
+<p>この構成にしている理由は、<strong>APIキーをアプリの中に持たせないため</strong>です。アプリにキーを埋め込むと、アプリをお渡しした方がキーを取り出せてしまうため、キーは中継サーバー側にのみ置いています。</p>
+<p>中継サーバーが保存するのは、<strong>丸めた座標と、それに対応する天気の内容だけ</strong>です（問い合わせ回数を減らすための一時的な保存で、最大30分で自動的に消えます）。<strong>お名前・端末の識別子・アカウント情報など、どなたの問い合わせかを示す情報は保存していません。</strong>また、Cloudflareの標準機能により、通信の記録（接続元のIPアドレスを含みます）が短期間保持される場合があります。OpenWeatherMap社へ渡った位置情報は、同社のプライバシーポリシーに従って取り扱われます。</p>
 
 <h2>4. Googleユーザーデータの取り扱い</h2>
 <p>本アプリがGoogleアカウントに対して要求する権限（スコープ）と、その使いみちは次のとおりです。本アプリは、<strong>要求した権限を、以下に記載した目的以外には一切使用しません。</strong></p>

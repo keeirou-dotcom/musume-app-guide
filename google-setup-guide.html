@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Googleカレンダーの連携 | まいにちサポート</title>
+<style>
+  body{font-family:'Hiragino Maru Gothic ProN','Zen Maru Gothic',sans-serif; max-width:720px; margin:0 auto; padding:32px 20px; color:#4A3A5B; background:#FAF7FC; line-height:1.8;}
+  h1{font-size:24px; margin-bottom:4px;}
+  h2{font-size:18px; margin-top:36px; background:#EAE1FA; padding:8px 14px; border-radius:10px;}
+  h3{font-size:15px; color:#B93A6B; margin-top:22px; margin-bottom:6px;}
+  .note{background:#FFF1E9; border:1px solid #E0A87A; border-radius:10px; padding:10px 14px; font-size:13px; color:#9E5220; margin:14px 0;}
+  .calm{background:#EDF6EC; border:1px solid #8FBF8A; border-radius:10px; padding:12px 16px; font-size:13.5px; color:#3F6B3A; margin:14px 0;}
+  .step{background:#fff; border:1px solid #E8E0F2; border-radius:12px; padding:14px 16px; margin:10px 0;}
+  .screen{background:#F4F0FB; border:1px dashed #B9A6DC; border-radius:10px; padding:12px 14px; margin:12px 0; font-size:13.5px;}
+  .screen .title{font-weight:bold; color:#6B4E9E; display:block; margin-bottom:4px;}
+  code{background:#EDE6F9; padding:2px 6px; border-radius:6px; font-size:0.9em; word-break:break-all;}
+  ol, ul{padding-left:22px;}
+  li{margin-bottom:6px;}
+  .q{font-weight:bold; color:#B93A6B; margin-top:18px; margin-bottom:2px;}
+  .a{margin-top:0;}
+  table{border-collapse:collapse; width:100%; font-size:13.5px; margin:10px 0;}
+  th,td{border:1px solid #E8E0F2; padding:8px 10px; text-align:left; vertical-align:top;}
+  th{background:#F4F0FB; white-space:nowrap;}
+  figure{margin:16px 0;}
+  figure img{width:100%; height:auto; display:block; border:1px solid #E0D8EE; border-radius:10px; background:#fff;}
+  figure.ph{text-align:center;}
+  figure.ph img{max-width:300px; margin:0 auto; border:none; background:none;}
+  figcaption{font-size:12.5px; color:#7A6B8A; margin-top:6px;}
+  .pin{display:inline-flex; align-items:center; justify-content:center; width:19px; height:19px; border-radius:50%;
+       background:#E8467C; color:#fff; font-size:12px; font-weight:bold; vertical-align:-3px; margin:0 2px;}
+  @media (max-width:520px){ th{white-space:normal;} table{font-size:12.5px;} }
+  
+</style>
+</head>
+<body>
+
+<h1>📅 Googleカレンダーをアプリにつなぐ</h1>
+<p>設定の最後、3番目の手順です。お子様の端末の「まいにちサポート」に、ご家庭のGoogleカレンダーの予定を表示するための設定です。ここでする作業は<strong>3つだけ</strong>で、だいたい5分ほどで終わります。むずかしい登録や、新しいアカウントの作成は必要ありません。</p>
+
+<div class="note">
+※アプリの画面写真は2026年9月時点のものです。Googleのログイン画面は今後変わることがあります。表示が少し違っていても、やることは同じです。迷ったら遠慮なく開発者までご連絡ください。
+</div>
+
+<h2>この作業で何をするか(全体像)</h2>
+<ol>
+  <li>アプリの中で、ふだんお使いのGoogleアカウントでログインする</li>
+  <li>どのカレンダーの予定を表示するかを決める</li>
+  <li>「そうだんチャットのふりかえり」を送るメールアドレスを入れる</li>
+</ol>
+<p style="font-size:13.5px;">お手元に、<strong>お子様の端末</strong>と、ご家庭で予定を管理している<strong>Googleアカウント(Gmailのアドレスとパスワード)</strong>をご用意ください。</p>
+
+<h2>Step 1. アプリでGoogleにログインする</h2>
+<div class="step">
+  <ol>
+    <li>お子様の端末で「まいにちサポート」を開きます。</li>
+    <li>ホーム画面を<strong>下までスクロール</strong>し、<span class="pin">1</span>「<strong>きょうの予定</strong>」のカード(その下に「カレンダーをひらく」と書いてあります)をタップします。<br>
+      <span style="font-size:13px; color:#655674;">※画面のいちばん下に並んでいるのは「ホーム / おくすり / 天気 / 相談 / メモ」の5つで、カレンダーはここにはありません。</span></li>
+  </ol>
+
+  <figure class="ph">
+    <img src="./img/g-01-home.png" alt="まいにちサポートのホーム画面。いちばん下にある「きょうの予定／カレンダーをひらく」のカード">
+    <figcaption>ホーム画面のいちばん下にあります。</figcaption>
+  </figure>
+
+  <ol start="3">
+    <li>カレンダーの画面が開きます。上のほうにある <span class="pin">1</span>「<strong>🔗 Googleカレンダーと連携する</strong>」を押します。</li>
+    <li>Googleのログイン画面が出ます。ご家庭で予定を管理しているGoogleアカウントを選んで(または入力して)ログインしてください。</li>
+  </ol>
+
+  <figure class="ph">
+    <img src="./img/g-02-calendar.png" alt="カレンダー画面。上部の「Googleカレンダーと連携する」リンク">
+    <figcaption>連携が終わると、この場所に「連携ずみ」と表示されます。</figcaption>
+  </figure>
+</div>
+
+<h3>途中で「確認されていません」という画面が出たら</h3>
+<p>ログインの途中で、次のような少しびっくりする画面が出ることがあります。</p>
+
+<div class="screen">
+  <span class="title">⚠️ このアプリは Google で確認されていません</span>
+  このアプリは、Google による確認が済んでいません。信頼できるデベロッパーの場合のみ続行してください。
+</div>
+
+<div class="calm">
+  <strong>これは故障でも、あやしいアプリでもありません。</strong>
+  このアプリはApp Storeで一般公開している市販アプリではなく、開発者が個人で作って、直接お渡ししているアプリです。Googleは「まだ審査を受けていないアプリ」に対して、念のためこの画面を出す仕組みになっています。<br>
+  お使いのアカウントの情報が誰かに送られる、といったことはありません。ご不安な場合は、この画面のまま開発者にご連絡ください。
+</div>
+
+<div class="step">
+  <p style="margin-top:0;"><strong>この画面の進み方</strong></p>
+  <ol>
+    <li>画面の左下あたりにある「<strong>詳細</strong>」(または「詳細設定」)を押します。</li>
+    <li>下に出てくる「<strong>まいにちサポート（安全ではないページ）に移動</strong>」を押します。</li>
+    <li>「まいにちサポート が Google アカウントへのアクセスを求めています」という画面になります。「<strong>次へ</strong>」を押します。</li>
+    <li>続いて、アプリに許可する内容の一覧が表示されます。</li>
+  </ol>
+</div>
+
+<div class="note">
+  この画面に「<strong>プライバシー ポリシーや利用規約へのリンクが表示されない理由をご確認ください</strong>」と出ることがあります。<br>
+  これは、このアプリがまだGoogleの確認を受けていないため、Googleがリンクの表示を控えているだけで、ポリシーが無いわけではありません。プライバシーポリシーは
+  <a href="./privacy.html">こちら</a>（<code>https://keeirou-dotcom.github.io/musume-app-guide/privacy.html</code>）からいつでもお読みいただけます。
+</div>
+
+<h3>「許可」を求められる内容について</h3>
+<p>アプリがお願いしている権限は次の3つだけです。それぞれ、何に使うためのものかをご説明します。</p>
+
+<table>
+  <tr><th>権限</th><th>アプリでの使いみち</th></tr>
+  <tr>
+    <td>カレンダーの閲覧<br><span style="font-size:12px; color:#7A6B8A;">calendar.readonly</span></td>
+    <td>お子様のホーム画面・カレンダー画面に、ご家庭の予定を表示するために使います。<strong>読み取り専用</strong>なので、アプリが勝手に予定を追加したり消したりすることはできません。</td>
+  </tr>
+  <tr>
+    <td>メールの送信<br><span style="font-size:12px; color:#7A6B8A;">gmail.send</span></td>
+    <td>「そうだんチャットのふりかえり」を、保護者の方のメールアドレスに送るときだけ使います。ボタンを押したときにだけ動きます。</td>
+  </tr>
+  <tr>
+    <td>ドライブへのファイル作成<br><span style="font-size:12px; color:#7A6B8A;">drive.file</span></td>
+    <td>同じく「ふりかえり」をドライブに保存するときに使います。<strong>アプリが作ったファイルだけ</strong>を扱える範囲の権限で、ドライブの中の他のファイルは見られません。</td>
+  </tr>
+</table>
+
+<p>内容を確認したら「<strong>続行</strong>」(または「許可」)を押してください。カレンダー画面に戻り、予定が読み込まれれば連携は完了です。</p>
+<p style="font-size:13.5px; color:#655674;">※画面の表記はGoogle側の都合で変わることがあります。ボタンの名前が違っても、上の3つ以外の権限を求められることはありません。もし見慣れない権限が出た場合は、進めずに開発者までご連絡ください。</p>
+
+<h2>Step 2. 表示するカレンダーを決める</h2>
+<div class="step">
+  <p style="margin-top:0;">アプリは最初、<strong>いまログインしたご本人のカレンダー</strong>の予定を表示するようになっています。ご家庭の予定をそのアカウントで管理されている場合は、<strong>この手順はとばして構いません</strong>。</p>
+  <p>ご家族で「共有カレンダー」を作って予定を管理している場合だけ、次の設定をしてください。</p>
+</div>
+
+<h3>共有カレンダーを表示したい場合</h3>
+<div class="step">
+  <p style="margin-top:0;"><strong>まず、そのカレンダーの「カレンダーID」を調べます。</strong>(パソコンかスマホのブラウザで行うのが簡単です)</p>
+  <ol>
+    <li>パソコンのブラウザで <a href="https://calendar.google.com/calendar/r/settings" target="_blank" rel="noopener">Googleカレンダーの設定画面</a> を開きます(カレンダー画面の右上「⚙️」→「設定」でも同じ画面です)。</li>
+    <li>画面左側の「マイカレンダーの設定」の中から、<span class="pin">1</span>表示したいカレンダーの<strong>名前</strong>を押します。下に項目が開きます。</li>
+    <li><span class="pin">2</span>「<strong>カレンダーの統合</strong>」を押します。</li>
+    <li><span class="pin">3</span>「<strong>カレンダーID</strong>」の欄に <code>....@group.calendar.google.com</code> のような文字列があります。これをコピーします。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/g-05-calendar-id.png" alt="Googleカレンダーの設定画面。左のマイカレンダーの設定、カレンダーの統合、カレンダーIDの欄">
+    <figcaption>すぐ下にある「公開URL」「埋め込みコード」は使いません。必要なのは「カレンダーID」の1行だけです。</figcaption>
+  </figure>
+
+  <div class="note">
+    スマホのGoogleカレンダー<strong>アプリ</strong>からは、カレンダーIDを見ることができません。パソコンか、スマホのブラウザで「PC版サイト」を表示してお試しください。
+  </div>
+  <p><strong>つづいて、アプリに貼り付けます。</strong></p>
+  <ol>
+    <li>お子様の端末で「まいにちサポート」を開き、ホーム画面右上の「<strong>⚙️</strong>」を押します。</li>
+    <li>設定画面を下にスクロールし、<span class="pin">1</span>「<strong>📅 カレンダーとふりかえりの設定</strong>」を開きます。</li>
+  </ol>
+
+  <figure class="ph">
+    <img src="./img/g-03-appsettings.png" alt="アプリの設定画面。下のほうにある「カレンダーとふりかえりの設定」ボタン">
+    <figcaption>⚙️の設定画面を下へスクロールすると出てきます。</figcaption>
+  </figure>
+
+  <ol start="3">
+    <li><span class="pin">1</span>「表示するカレンダー」の欄に、先ほどコピーしたカレンダーIDを貼り付けます。</li>
+    <li><span class="pin">3</span>「保存する」を押します。カレンダー画面に戻ると、共有カレンダーの予定が表示されます。</li>
+  </ol>
+
+  <figure class="ph">
+    <img src="./img/g-04-googlesettings.png" alt="カレンダーとふりかえりの設定。表示するカレンダー欄、ふりかえりの送り先メールアドレス欄、保存するボタン">
+    <figcaption><span class="pin">1</span> 表示するカレンダー ／ <span class="pin">2</span> ふりかえりの送り先(次のStep 3で使います) ／ <span class="pin">3</span> 保存する</figcaption>
+  </figure>
+</div>
+
+<div class="note">
+  <strong>大切な確認:</strong> 共有カレンダーの予定を表示するには、<strong>Step 1でログインしたGoogleアカウントが、そのカレンダーを見られる状態</strong>になっている必要があります。まだ共有していない場合は、Googleカレンダーの「設定と共有」→「特定のユーザーとの共有」から、そのアカウントを追加しておいてください(権限は「予定の表示(すべての予定の詳細)」で十分です)。
+</div>
+
+<h2>Step 3. ふりかえりの送り先を入れる</h2>
+<div class="step">
+  <p style="margin-top:0;">「そうだんチャットのふりかえり」は、お子様がAIと話した内容を、あとから保護者の方が読み返せるようにメールで送る機能です。その<strong>送り先のメールアドレス</strong>を登録します。</p>
+  <ol>
+    <li>ホーム画面右上の「<strong>⚙️</strong>」→「<strong>📅 カレンダーとふりかえりの設定</strong>」を開きます(上の図と同じ画面です)。</li>
+    <li><span class="pin">2</span>「ふりかえりの送り先メールアドレス」の欄に、<strong>保護者の方のメールアドレス</strong>を入力します。</li>
+    <li><span class="pin">3</span>「保存する」を押します。</li>
+  </ol>
+  <p style="margin-bottom:0; font-size:13.5px;">※ここが空のあいだは、メールでの送信は使えません(誤って他の方に送ってしまわないための仕組みです)。Googleドライブへの保存は、空のままでもお使いいただけます。</p>
+</div>
+
+<h2>うまくいかないときは</h2>
+
+<p class="q">Q. カレンダーに予定が出てきません</p>
+<p class="a">まず、⚙️の「カレンダーとふりかえりの設定」を開き、「表示するカレンダー」の欄をご確認ください。<code>primary</code>と書かれている場合は、ログインしたご本人のカレンダーを見にいっています。ご家族の共有カレンダーを見たい場合は、Step 2の手順でカレンダーIDを設定してください。<br>
+カレンダーIDを設定済みなのに出てこない場合は、そのカレンダーがログイン中のアカウントに共有されていない可能性が高いです(Step 2の最後の「大切な確認」をご覧ください)。</p>
+
+<p class="q">Q. 「アクセス権の更新に失敗しました」と出ます</p>
+<p class="a">連携の有効期限が切れたか、Google側で許可が取り消された可能性があります。ホーム画面の「きょうの予定」からカレンダーを開き、上のほうの「🔗 Googleカレンダーと連携する」からもう一度ログインし直してください。</p>
+
+<p class="q">Q. 警告画面から先に進めません</p>
+<p class="a">「詳細」という小さな文字が、画面の左下あたりにあります。押すと、下に「(アプリ名)に移動」というリンクが出てきます。見つからない場合は、画面を少し下にスクロールしてみてください。</p>
+
+<p class="q">Q. 子どもの端末に、親のGoogleアカウントでログインしても大丈夫ですか？</p>
+<p class="a">はい、大丈夫です。むしろご家庭の予定が保護者の方のカレンダーに入っている場合は、そのほうが設定が簡単です。ただし、その端末からは<strong>そのアカウントのカレンダーの予定が見える</strong>状態になりますので、お子様に見せたくない予定がある場合は、お子様用の共有カレンダーを別に作って、そちらを表示する方法をおすすめします。</p>
+
+<p class="q">Q. あとから連携をやめたくなったら？</p>
+<p class="a">Googleアカウントの<a href="https://myaccount.google.com/permissions">「アカウントにアクセスできるアプリ」</a>のページから、いつでもこのアプリのアクセスを取り消せます。取り消すと、アプリにカレンダーの予定が表示されなくなります。</p>
+
+<div class="calm">
+  <strong>お預かりする情報について</strong><br>
+  このアプリは、カレンダーの予定を<strong>お子様の端末の中に読み込んで表示するだけ</strong>です。開発者のサーバーに予定の内容が送られたり、保存されたりすることはありません。「ふりかえり」のメールも、お子様の端末から、ご登録いただいたアドレスへ直接送られます。
+</div>
+
+<p style="text-align:center; margin-top:28px;"><a href="./setup-index.html">← 設定ガイドの目次にもどる</a></p>
+
+</body>
+</html>

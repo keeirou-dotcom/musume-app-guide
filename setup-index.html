@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>はじめての設定ガイド | まいにちサポート</title>
+<style>
+  :root{ --bg:#FAF7FC; --card:#fff; --text:#4A3A5B; --muted:#7A6B8A; --line:#E8E0F2; --accent:#B93A6B; --accent-bg:#EAE1FA; }
+  *{box-sizing:border-box;}
+  body{font-family:'Hiragino Maru Gothic ProN','Zen Maru Gothic',sans-serif; max-width:720px; margin:0 auto; padding:36px 20px 64px; color:var(--text); background:var(--bg); line-height:1.85;}
+  h1{font-size:25px; margin:0 0 6px;}
+  .sub{color:var(--muted); font-size:14px; margin:0 0 4px;}
+  h2{font-size:18px; margin-top:38px; background:var(--accent-bg); padding:8px 14px; border-radius:10px;}
+  ul,ol{padding-left:22px;} li{margin-bottom:6px;}
+  .lead{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin:20px 0;}
+  .calm{background:#EDF6EC; border:1px solid #8FBF8A; border-radius:10px; padding:12px 16px; font-size:13.5px; color:#3F6B3A; margin:16px 0;}
+  .note{background:#FFF1E9; border:1px solid #E0A87A; border-radius:10px; padding:10px 14px; font-size:13px; color:#9E5220; margin:16px 0;}
+
+  .card{display:block; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin:12px 0; text-decoration:none; color:inherit;}
+  .card:hover{border-color:#C9B6E8;}
+  .card-head{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:2px;}
+  .num{display:inline-flex; align-items:center; justify-content:center; min-width:26px; height:26px; border-radius:50%; background:var(--accent-bg); color:#6B4E9E; font-weight:bold; font-size:14px;}
+  .card-title{font-size:16.5px; font-weight:bold;}
+  .meta{font-size:12.5px; color:var(--muted); margin-left:auto;}
+  .card-desc{font-size:13.5px; color:var(--text); margin:4px 0 0;}
+  .need{font-size:12.5px; color:var(--muted); margin-top:8px;}
+  .go{font-size:13px; color:#6B4E9E; margin-top:10px; font-weight:bold;}
+  table{border-collapse:collapse; width:100%; font-size:13.5px; margin:10px 0; background:var(--card);}
+  th,td{border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top;}
+  th{background:#F4F0FB; white-space:nowrap;}
+  footer{margin-top:44px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:13px;}
+  a{color:#6B4E9E;}
+  @media (max-width:520px){ th{white-space:normal;} table{font-size:12.5px;} }
+  @media (max-width:520px){ body{font-size:14.5px; padding:24px 16px 48px;} .meta{margin-left:0; width:100%;} }
+</style>
+</head>
+<body>
+
+<h1>🌸 はじめての設定ガイド</h1>
+<p class="sub">まいにちサポート ／ セットアップの流れ</p>
+
+<div class="lead">
+  <p style="margin-top:0;">「まいにちサポート」を使いはじめるには、<strong>3つの準備</strong>が必要です。少し手数はありますが、<strong>上から順にやれば、合わせて1時間ほどで終わります</strong>。</p>
+  <p style="margin-bottom:0;">どれも「ご家庭のアカウントで動かす」ための作業です。この一手間があるおかげで、お子様の会話や予定を開発者が見られない形になります。</p>
+</div>
+
+<h2>はじめる前に用意するもの</h2>
+<ul>
+  <li>お子様の端末(アプリを入れたiPhone)</li>
+  <li>保護者の方のスマホかパソコン(設定作業用)</li>
+  <li>クレジットカード(AIチャットのチャージに使います。最低5ドルから)</li>
+  <li>ふだんお使いのLINEアカウントとGoogleアカウント</li>
+</ul>
+
+<h2>設定の流れ</h2>
+
+<a class="card" href="./anthropic-setup-guide.html">
+  <div class="card-head">
+    <span class="num">1</span>
+    <span class="card-title">💬 AIチャットの準備</span>
+    <span class="meta">約10分</span>
+  </div>
+  <p class="card-desc">そうだんチャットのAIを動かすための「APIキー」を発行します。前払いのチャージ制で、5ドルから始められます。使いすぎ防止の上限も設定します。</p>
+  <p class="need">用意するもの: クレジットカード</p>
+  <p class="go">ガイドを開く →</p>
+</a>
+
+<a class="card" href="./line-setup-guide.html">
+  <div class="card-head">
+    <span class="num">2</span>
+    <span class="card-title">🔌 LINEと通知の設定</span>
+    <span class="meta">約30分</span>
+  </div>
+  <p class="card-desc">ご家庭専用のLINE公式アカウントを作り、通知を担当する小さなプログラム(Worker)を用意します。<strong>いちばん手数が多いところ</strong>ですが、ここが終われば「れんらく」や「あそび許可」の通知が届くようになります。手順1で控えたAPIキーもここで使います。</p>
+  <p class="need">用意するもの: LINEアカウント / 手順1のAPIキー</p>
+  <p class="go">ガイドを開く →</p>
+</a>
+
+<a class="card" href="./google-setup-guide.html">
+  <div class="card-head">
+    <span class="num">3</span>
+    <span class="card-title">📅 カレンダーの連携</span>
+    <span class="meta">約5分</span>
+  </div>
+  <p class="card-desc">ご家庭のGoogleカレンダーの予定を、アプリに表示できるようにします。アプリでGoogleにログインするだけなので、いちばん簡単です。</p>
+  <p class="need">用意するもの: Googleアカウント</p>
+  <p class="go">ガイドを開く →</p>
+</a>
+
+<h2>それぞれ、何のための作業か</h2>
+<table>
+  <tr><th>手順</th><th>できるようになること</th><th>誰のアカウントを使うか</th></tr>
+  <tr>
+    <td>1. AIチャット</td>
+    <td>そうだんチャット、服装アドバイス、あそび許可の判断</td>
+    <td>ご家庭のアカウント</td>
+  </tr>
+  <tr>
+    <td>2. LINEと通知</td>
+    <td>れんらくスタンプ、家族へのメモ、あそび許可の通知</td>
+    <td>ご家庭のアカウント</td>
+  </tr>
+  <tr>
+    <td>3. カレンダー</td>
+    <td>ホーム画面とカレンダー画面への予定の表示</td>
+    <td>ご家庭のアカウント</td>
+  </tr>
+  <tr>
+    <td>(設定不要)</td>
+    <td>天気、服装アドバイスの気温データ</td>
+    <td>開発者のアカウント</td>
+  </tr>
+</table>
+<p style="font-size:13.5px;">天気だけは、開発者があらかじめ用意した中継サーバーとアカウントで動きます。位置情報から天気を調べるだけで、お子様の記録や会話とは関係のない部分のため、設定の手間をなくしています。<strong>この部分だけは、おおよその位置(約1kmの精度に丸めたもの)が開発者の中継サーバーを通ります。</strong>詳しくは<a href="./privacy.html">プライバシーポリシー</a>をご覧ください。</p>
+
+<h2>設定を代行してもらう場合</h2>
+<div class="calm">
+  ご希望があれば、開発者がこの3つの設定を代行します。その場合も、<strong>できあがるものは「ご家庭のアカウントで動く状態」で同じ</strong>です。<br>
+  作業中は、手順1で発行したAPIキーなどを一時的に開発者がお預かりします。気になる場合は、セットアップ後にご自身でキーを作り直していただくこともできます(手順1のガイドに書いてあります)。
+</div>
+
+<h2>設定が終わったら</h2>
+<ul>
+  <li>お子様の端末でアプリを開き、⚙️の設定画面に「✅ 設定済み」と出ていれば完了です。</li>
+  <li>お父さん・お母さんがLINEで「おとうさん」「おかあさん」と送って、通知の宛先を登録します(手順2の最後にあります)。</li>
+  <li>使い方は<a href="./">つかいかたガイド</a>をご覧ください。</li>
+</ul>
+
+<footer>
+  <p>うまくいかないところがあれば、途中で構いませんので開発者までご連絡ください。<br>
+  まいにちサポート ／ <a href="./">つかいかたガイドへ</a> ／ <a href="./privacy.html">プライバシーポリシー</a></p>
+</footer>
+
+</body>
+</html>

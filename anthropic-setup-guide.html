@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIチャットの準備(Anthropic APIキー)</title>
+<style>
+  body{font-family:'Hiragino Maru Gothic ProN','Zen Maru Gothic',sans-serif; max-width:720px; margin:0 auto; padding:32px 20px 64px; color:#4A3A5B; background:#FAF7FC; line-height:1.8;}
+  h1{font-size:24px; margin-bottom:4px;}
+  h2{font-size:18px; margin-top:36px; background:#EAE1FA; padding:8px 14px; border-radius:10px;}
+  h3{font-size:15px; color:#B93A6B; margin-top:22px; margin-bottom:6px;}
+  .note{background:#FFF1E9; border:1px solid #E0A87A; border-radius:10px; padding:10px 14px; font-size:13px; color:#9E5220; margin:14px 0;}
+  .calm{background:#EDF6EC; border:1px solid #8FBF8A; border-radius:10px; padding:12px 16px; font-size:13.5px; color:#3F6B3A; margin:14px 0;}
+  .warn{background:#FCEBEA; border:1px solid #E0827A; border-radius:10px; padding:12px 16px; font-size:13.5px; color:#B3261E; margin:14px 0;}
+  .step{background:#fff; border:1px solid #E8E0F2; border-radius:12px; padding:14px 16px; margin:10px 0;}
+  code{background:#EDE6F9; padding:2px 6px; border-radius:6px; font-size:0.9em; word-break:break-all;}
+  ol, ul{padding-left:22px;}
+  li{margin-bottom:6px;}
+  .q{font-weight:bold; color:#B93A6B; margin-top:18px; margin-bottom:2px;}
+  .a{margin-top:0;}
+  table{border-collapse:collapse; width:100%; font-size:13.5px; margin:10px 0; background:#fff;}
+  th,td{border:1px solid #E8E0F2; padding:8px 10px; text-align:left; vertical-align:top;}
+  th{background:#F4F0FB; white-space:nowrap;}
+  figure{margin:14px 0;}
+  figure img{width:100%; height:auto; display:block; border:1px solid #E0D8EE; border-radius:10px; background:#fff;}
+  figcaption{font-size:12.5px; color:#7A6B8A; margin-top:6px;}
+  .pin{display:inline-flex; align-items:center; justify-content:center; width:19px; height:19px; border-radius:50%;
+       background:#E8467C; color:#fff; font-size:12px; font-weight:bold; vertical-align:-3px; margin:0 2px;}
+  @media (max-width:520px){ th{white-space:normal;} table{font-size:12.5px;} }
+  @media (max-width:520px){ body{font-size:14.5px; padding:24px 16px 48px;} th,td{padding:7px 8px;} }
+</style>
+</head>
+<body>
+
+<h1>💬 AIチャット(チャチャ)の準備をする</h1>
+<p>「まいにちサポート」のそうだんチャットは、お子様の話し相手になるAIです。このAIを動かすために、<strong>ご家庭専用の「APIキー」</strong>を1つご用意いただきます。だいたい10分ほどの作業です。クレジットカードをお手元にご用意ください。</p>
+
+<div class="note">
+※この手順と画面写真は、2026年9月に実際の画面で通して確認したものです。管理画面は黒い背景のデザインです。今後変わることがありますので、実際の画面と見比べながらお進めください。
+</div>
+
+<h2>なぜ、ご家庭ごとに用意するのか</h2>
+<div class="calm">
+  お子様がAIと話した内容は、とてもプライベートなものです。もし開発者のアカウントを全家庭で共用していると、その会話が開発者側を経由することになってしまいます。<br>
+  <strong>ご家庭専用のキーをお使いいただくことで、お子様の会話は「ご家庭のアカウント」の中だけで完結し、開発者が内容を見ることはできなくなります。</strong>少し手間はかかりますが、この一手間がお子様のプライバシーを守ります。
+</div>
+
+<h2>この作業で何をするか(全体像)</h2>
+<ol>
+  <li>Claudeのコンソール(開発者向けの管理画面)にアカウントを作る</li>
+  <li>クレジットを購入する(最低5ドルから)</li>
+  <li>使いすぎ防止の「上限」を設定する</li>
+  <li>APIキーを発行して、控えておく</li>
+</ol>
+
+<h2>Step 1. アカウントを作る</h2>
+<div class="step">
+  <ol>
+    <li><a href="https://platform.claude.com/" target="_blank" rel="noopener">platform.claude.com</a> を開きます(以前の <code>console.anthropic.com</code> は、こちらに自動で切り替わります)。</li>
+    <li>「Sign up」からアカウントを作成します。ふだんお使いのメールアドレスか、Googleアカウントでの登録ができます。</li>
+    <li>メールに届いた確認コードを入力すると、登録が完了します。</li>
+  </ol>
+  <p style="font-size:13.5px; margin-bottom:0;">※これは、ふだんチャットで使う「Claude」のアカウントとは別の、<strong>開発者向けの管理画面</strong>です。見慣れない画面ですが、使うのは最初の設定のときだけです。</p>
+</div>
+
+<h2>Step 2. クレジットを購入する</h2>
+<div class="step">
+  <p style="margin-top:0;">このサービスは<strong>月額制ではなく、前払いのチャージ制</strong>です。買ったぶんだけ使え、使い切るまで追加の請求は発生しません。</p>
+  <ol>
+    <li>左のメニューから <span class="pin">1</span>「<strong>請求</strong>」を開きます。</li>
+    <li>「クレジット残高」の欄にある <span class="pin">2</span>「<strong>クレジットを購入</strong>」を押します。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/an-01-billing.png" alt="Claude Consoleの請求画面。左メニューの請求と、クレジット残高の右にあるクレジットを購入ボタン">
+    <figcaption>はじめての場合、残高は $0.00 と表示されています。</figcaption>
+  </figure>
+
+  <ol start="3">
+    <li>「クレジットを追加」という画面が開きます。金額を選びます。<span class="pin">1</span><strong>いちばん少ない $5 で十分です</strong>($20 に「推奨」と付いていますが、まずは $5 で様子を見てください)。</li>
+    <li><span class="pin">2</span> 合計金額を確認します。消費税が上乗せされるので、<strong>$5 のクレジットなら支払いは $5.50</strong> です。</li>
+    <li>支払い方法を選び、<span class="pin">3</span>「$5のクレジットを購入」を押します。残高に反映されれば完了です。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/an-02-add-credit.png" alt="クレジットを追加ダイアログ。$5/$20/$100/その他の選択、使用クレジット・推定税額・合計金額、購入ボタン">
+    <figcaption>「使用クレジット $5.00 ＋ 推定税額 $0.50 ＝ 合計金額 $5.50」と表示されます。</figcaption>
+  </figure>
+
+  <div class="note">
+    まだカードを登録していない場合は、先に「請求」画面の「お支払い詳細」にある<strong>「請求先住所を編集」と「支払い方法を追加」</strong>を済ませてください。住所の入力が終わっていないと、カードの欄が出てこないことがあります。
+  </div>
+</div>
+
+<div class="note">
+「自動リロード」という設定をオンにすると、残高が減ったときに自動でチャージされます。<strong>最初はオフのままをおすすめします。</strong>まずは $5 でどのくらい使うかを見てから、必要に応じて検討してください。
+</div>
+
+<div class="note">
+<strong>消費税がかかります。</strong>購入画面に「推定税額」として10%が上乗せされるため、$5 のクレジットを買うと支払いは <strong>$5.50</strong> になります($20 なら $22.00)。残高に入るのは $5 ぶんです。
+</div>
+
+<h2>Step 3. 使いすぎ防止の上限を設定する(おすすめ)</h2>
+<div class="step">
+  <p style="margin-top:0;">「知らないうちに高額になっていたら怖い」という不安を、設定でなくしておきましょう。</p>
+  <ol>
+    <li>同じ「請求」の画面を下にスクロールし、「<strong>利用上限</strong>」という項目を探します。<span class="pin">1</span>「月間支出上限」が、いま設定されている1か月の上限です。</li>
+    <li><span class="pin">2</span>「制限を調整」から、1か月に使ってよい上限額を設定します。</li>
+    <li>その下の「メール通知」では、<strong>いくら使ったらメールで知らせるか</strong>を決められます。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/an-03-limit.png" alt="請求画面の利用上限セクション。使用済み金額、月間支出上限と制限を調整ボタン、メール通知">
+    <figcaption>今月いくら使ったかも、ここで一目で分かります。</figcaption>
+  </figure>
+
+  <p style="margin-bottom:0;">前払い制なので、そもそもチャージした金額を超えて使われることはありません。上限設定は、その上でのもう一段の安心材料です。</p>
+</div>
+
+<h2>Step 4. APIキーを発行する</h2>
+<div class="step">
+  <ol>
+    <li>左のメニューから <span class="pin">1</span>「<strong>APIキー</strong>」を開き、右上の <span class="pin">2</span>「<strong>キーを作成</strong>」を押します。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/an-04-keys.png" alt="APIキーの一覧画面。左メニューのAPIキーと、右上のキーを作成ボタン">
+    <figcaption>はじめての場合、一覧は空の状態です。</figcaption>
+  </figure>
+
+  <ol start="2">
+    <li>「ID連携を使用すれば、APIキーは不要です」という案内が出ます。これは会社のシステム向けの別のしくみの案内です。<span class="pin">1</span>下側の「<strong>APIキーで続ける</strong>」を押してください。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/an-05-continue.png" alt="ID連携の案内画面。ID連携を設定するボタンと、その下のAPIキーで続けるボタン">
+    <figcaption>目立つ「ID連携を設定する」ではなく、その下の小さな文字のほうです。</figcaption>
+  </figure>
+
+  <ol start="3">
+    <li>作成画面が開きます。<span class="pin">1</span>「名前」に分かりやすい名前を入れます(例:<code>まいにちサポート</code>)。</li>
+    <li><span class="pin">2</span>「有効期限」を「<strong>なし</strong>」に変えます。ここを押すと選択肢が出るので、いちばん下の「なし」を選んでください。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/an-06-expiry.png" alt="有効期限の選択肢。3時間・1日・7日間・30日間・カスタム・なし">
+    <figcaption>初期値は「30日間」です。いちばん下の「なし」を選びます。</figcaption>
+  </figure>
+
+  <div class="warn">
+    <strong>⚠️ ここがいちばんの落とし穴です。</strong><br>
+    有効期限の初期値は「<strong>30日間</strong>」になっています。そのまま作ってしまうと、<strong>1か月後に突然そうだんチャットだけ返事が来なくなります</strong>。必ず「なし」を選んでください。
+  </div>
+
+  <ol start="5">
+    <li>「リンクされたアカウント」はご自身のままで構いません。「スコープ」は「<strong>デフォルトワークスペース</strong>」を選びます。</li>
+    <li><span class="pin">3</span>「<strong>キーを作成</strong>」を押します。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/an-07-create-form.png" alt="APIキーを作成の画面。名前・有効期限なし・リンクされたアカウント・スコープ・キーを作成ボタン">
+    <figcaption>この形になっていれば大丈夫です。</figcaption>
+  </figure>
+
+  <ol start="7">
+    <li>作成すると、<code>sk-ant-...</code> で始まる長い文字列が表示されます。</li>
+  </ol>
+</div>
+
+<div class="warn">
+  <strong>⚠️ このキーは、この一度しか表示されません。</strong><br>
+  画面を閉じると二度と見られなくなります。表示されたらすぐにコピーして、メモ帳など安全な場所に貼り付けて保存してください。<br>
+  もし控え忘れても心配はいりません。そのキーを削除して、新しいキーを作り直せば大丈夫です。
+</div>
+
+<h2>費用のこと</h2>
+<p>AIとの会話は、話した量に応じて少しずつ消費されます。ご家庭でお子様が日常的に使う範囲であれば、<strong>多くの場合ごく少額</strong>におさまります。</p>
+<table>
+  <tr><th>項目</th><th>内容</th></tr>
+  <tr><td>支払いのしくみ</td><td>前払いのチャージ制。チャージした残高を超えて使われることはありません</td></tr>
+  <tr><td>最低購入額</td><td>$5 から(消費税10%が加わり、支払いは $5.50)</td></tr>
+  <tr><td>使った量の確認</td><td>コンソールの「請求」画面で、いつでも残高と履歴を確認できます</td></tr>
+  <tr><td>残高が尽きたら</td><td>そうだんチャットが動かなくなります(他の機能はそのまま使えます)。追加でチャージすれば元に戻ります</td></tr>
+</table>
+
+<h2>セットアップを開発者に代行してもらう場合</h2>
+<div class="note">
+  発行したAPIキーは、次の手順(Cloudflare Workerの設定)で使います。この設定を開発者が代行する場合、<strong>キーを一時的に開発者がお預かりすることになります。</strong><br>
+  気になる場合は、セットアップが終わったあとにご自身でキーを作り直して(古いキーは削除して)、新しいキーをWorkerに設定し直していただくこともできます。その手順もご案内できますので、遠慮なくお申しつけください。
+</div>
+
+<h2>うまくいかないときは</h2>
+
+<p class="q">Q. 「Sign up」の画面が英語で分かりません</p>
+<p class="a">ブラウザの翻訳機能(Chromeなら右クリック →「日本語に翻訳」)を使うと読みやすくなります。入力するのはメールアドレスとパスワードだけです。</p>
+
+<p class="q">Q. カードが登録できません</p>
+<p class="a">請求先住所の入力が済んでいないと、カード情報の欄が出てこないことがあります。先に住所を入力してみてください。それでも進めない場合は、別のカードをお試しください。</p>
+
+<p class="q">Q. キーをどこかに書き留めるのが不安です</p>
+<p class="a">キーは「AIに話しかける権利」そのものです。他人に知られると、その人があなたの残高を使ってAIを利用できてしまいます。写真に撮ってSNSに載せる、メールに書いて送る、といったことは避けてください。もし漏れたかもしれないと思ったら、そのキーを削除して作り直せば、古いキーは無効になります。</p>
+
+<p class="q">Q. そうだんチャットだけ返事が来ません</p>
+<p class="a">次の3つのどれかであることがほとんどです。<br>
+① 残高が尽きている(コンソールの「請求」画面で確認できます)<br>
+② <strong>APIキーの有効期限が切れた</strong>(作成時に「なし」以外を選ぶと、その期間で止まります。「APIキー」の一覧で「有効期限」の欄を見てください)<br>
+③ キーの設定に誤りがある(手順2のWorkerに登録した値を見直してください)<br>
+②の場合は、新しいキーを「有効期限:なし」で作り直して、Workerの <code>ANTHROPIC_API_KEY</code> を差し替えれば直ります。</p>
+
+<div class="calm">
+  ここまでできたら、控えたAPIキーを持って、次の<a href="./line-setup-guide.html">手順2「LINEと通知の設定」</a>へお進みください。
+</div>
+
+<p style="text-align:center; font-size:13px; margin-top:24px;"><a href="./setup-index.html">設定ガイドの目次にもどる</a> ／ <a href="./privacy.html">プライバシーポリシー</a></p>
+
+</body>
+</html>

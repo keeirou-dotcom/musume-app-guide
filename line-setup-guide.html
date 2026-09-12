@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>LINEと通知の設定 | まいにちサポート</title>
+<style>
+  body{font-family:'Hiragino Maru Gothic ProN','Zen Maru Gothic',sans-serif; max-width:720px; margin:0 auto; padding:32px 20px; color:#4A3A5B; background:#FAF7FC; line-height:1.8;}
+  h1{font-size:24px; margin-bottom:4px;}
+  h2{font-size:18px; margin-top:36px; background:#EAE1FA; padding:8px 14px; border-radius:10px;}
+  h3{font-size:15px; color:#B93A6B; margin-top:22px;}
+  .note{background:#FFF1E9; border:1px solid #E0A87A; border-radius:10px; padding:10px 14px; font-size:13px; color:#9E5220; margin:14px 0;}
+  .todo{background:#FCEBEA; border:1px solid #E0827A; border-radius:10px; padding:10px 14px; font-size:13px; color:#B3261E; margin:14px 0;}
+  .step{background:#fff; border:1px solid #E8E0F2; border-radius:12px; padding:14px 16px; margin:10px 0;}
+  code{background:#EDE6F9; padding:2px 6px; border-radius:6px; font-size:0.9em;}
+  ol, ul{padding-left:22px;}
+  figure{margin:14px 0; }
+  figure img{width:100%; height:auto; display:block; border:1px solid #E0D8EE; border-radius:10px; background:#fff;}
+  figcaption{font-size:12.5px; color:#7A6B8A; margin-top:6px;}
+  .pin{display:inline-flex; align-items:center; justify-content:center; width:19px; height:19px; border-radius:50%;
+       background:#E8467C; color:#fff; font-size:12px; font-weight:bold; vertical-align:-3px; margin:0 2px;}
+</style>
+</head>
+<body>
+
+<h1>🔌 LINE公式アカウントとお家専用の通知係(Worker)を用意する</h1>
+<p>設定の2番目の手順です。<a href="./anthropic-setup-guide.html">手順1でAnthropicのAPIキー</a>を取得済みであることが前提です(このページの途中で使います)。ここでは、家族への通知を担当する「LINE公式アカウント」と、それを動かす「Worker(通知係のプログラム)」をご自宅専用にご用意いただきます。</p>
+<p style="font-size:13.5px; color:#655674;">※天気については設定は不要です。開発者があらかじめ用意した中継サーバーを通して取得されます(くわしくは<a href="./privacy.html">プライバシーポリシー</a>)。カレンダーの連携は、この手順が終わったあとの<a href="./google-setup-guide.html">手順3</a>で行います。</p>
+
+<div class="note">
+※この手順とボタン名・画面写真は、2026年9月に実際の画面で通して確認したものです。LINEやCloudflareの画面は今後変更が入ることがあります。表示が違っていても、やることは同じです。うまくいかないときは途中で構いませんので開発者までご連絡ください。
+</div>
+
+<h2>この作業で何をするか(全体像)</h2>
+<ol>
+  <li>LINE公式アカウントを作る(無料)</li>
+  <li>LINE Developersでチャネルアクセストークンと「チャネルシークレット」を取得する</li>
+  <li>Cloudflareの無料アカウントで、通知係のプログラム(Worker)を自分名義で動かす</li>
+  <li>Workerに、取得したLINEの情報を設定する</li>
+  <li>アプリの設定画面に、Workerのアドレスと合言葉を入力する</li>
+  <li>お父さん・お母さんがLINEで一言送って、通知の宛先として登録する</li>
+</ol>
+
+<h2>Step 1. LINE公式アカウントを作る</h2>
+<div class="step">
+  <ol>
+    <li><a href="https://manager.line.biz/" target="_blank" rel="noopener">LINE Official Account Manager</a> にアクセスし、お使いのLINEアカウントでログインします。</li>
+    <li>左のメニューにある <span class="pin">1</span>「<strong>作成</strong>」を押し、名前を入力します(例:「〇〇家 れんらく」。ご家族しか見ないので何でも構いません)。</li>
+    <li>業種などを聞かれた場合は「個人」に近い項目を選んでください。</li>
+    <li>作成が終わると「アカウントリスト」に並びます。<span class="pin">2</span>作ったアカウントの名前を押すと、そのアカウントの管理画面が開きます。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/ln-01-accounts.png" alt="LINE Official Account Managerのアカウントリスト。左メニューの作成ボタンと、アカウント名の一覧">
+    <figcaption>はじめての場合、この一覧は空の状態です。</figcaption>
+  </figure>
+</div>
+
+<h2>Step 2. Messaging APIを有効にして、トークンを取得する</h2>
+<div class="step">
+  <ol>
+    <li>作成した公式アカウントの管理画面で、右上の「設定」→ 左メニューの <span class="pin">1</span>「<strong>Messaging API</strong>」を開きます。</li>
+    <li>「Messaging APIを利用する」を有効にします。ここで自動的にLINE Developers側にも「プロバイダー」と「チャネル」が作られます。<span class="pin">2</span> ステータスが「<strong>利用中</strong>」になれば成功です。</li>
+    <li><span class="pin">3</span>「<strong>Channel secret</strong>」の文字列を「コピー」ボタンで控えておきます(<strong>これが手順4で使う「チャネルシークレット」です</strong>)。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/ln-02-messaging-api.png" alt="LINE Official Account ManagerのMessaging API設定画面。ステータス、Channel ID、Channel secret、Webhook URL">
+    <figcaption><span class="pin">4</span> の「Webhook URL」は手順4の最後で使います。いまは空のままで構いません。</figcaption>
+  </figure>
+
+  <ol start="4">
+    <li>つづいて <a href="https://developers.line.biz/console/" target="_blank" rel="noopener">LINE Developersコンソール</a> を開き、いま作られたチャネル(公式アカウントと同じ名前です)を選びます。</li>
+    <li>「Messaging API設定」タブを下までスクロールし、<span class="pin">1</span>「<strong>チャネルアクセストークン(長期)</strong>」の欄にある「<strong>発行</strong>」を押します。表示された長い文字列をコピーし、メモ帳など安全な場所に控えておきます(<strong>これが手順4で使う「チャネルアクセストークン」です</strong>)。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/ln-03-token.png" alt="LINE Developersのチャネルアクセストークン(長期)の欄と発行ボタン">
+    <figcaption>すでに発行済みの場合、ボタンは <span class="pin">2</span>「再発行」に変わります。<strong>一度使い始めたあとに再発行すると、前のトークンは使えなくなり通知が止まります。</strong></figcaption>
+  </figure>
+  <p style="font-size:13px; color:#655674;">この2つ(チャネルアクセストークン・チャネルシークレット)は、LINEになりすまして通知を送るための「鍵」です。他の人に見せたり、写真に写り込んだりしないよう気をつけてください。</p>
+</div>
+
+<h2>Step 3. Cloudflareで通知係のプログラム(Worker)を用意する</h2>
+<div class="step">
+  <ol>
+    <li><a href="https://dash.cloudflare.com/sign-up">Cloudflareのアカウント登録ページ</a>から、無料アカウントを作成します(メールアドレスとパスワードのみでOK)。</li>
+    <li>ログイン後のダッシュボードで、左メニューの <span class="pin">1</span>「Workers &amp; Pages」を開き、右上の <span class="pin">2</span>「Create application」ボタンを押します。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/cf-01-workers-list.png" alt="Cloudflareのダッシュボード。左メニューのWorkers &amp; Pagesと、右上のCreate applicationボタン">
+    <figcaption>左メニューは「Build」→「Compute」の中にあります。</figcaption>
+  </figure>
+
+  <ol start="3">
+    <li>選択肢の中から <span class="pin">1</span>「Start with Hello World!」を選びます。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/cf-02-hello-world.png" alt="Make something new の選択肢。Start with Hello World! を選ぶ">
+  </figure>
+
+  <ol start="4">
+    <li><span class="pin">1</span>「Worker name」欄に名前を入力します。名前は何でも構いません(例:<code>ourhome-chat-proxy</code>)。入力すると <code>(その名前).(あなたのサブドメイン).workers.dev</code> という形のURLになります。</li>
+    <li><span class="pin">2</span>「Deploy」を押します(この時点ではまだ「Hello World!」という見本のプログラムのままで大丈夫です)。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/cf-03-deploy.png" alt="Deploy Hello World の画面。Worker name の入力欄と Deploy ボタン">
+    <figcaption>「Worker preview」に出ている見本のコードは、このあと差し替えます。</figcaption>
+  </figure>
+
+  <ol start="6">
+    <li>デプロイが終わると、そのWorkerの管理画面が開きます。画面右上の <span class="pin">1</span>「Edit code」を押します(次の図)。</li>
+    <li>エディター画面が開いたら、中身の見本コードをすべて削除し、開発者から渡された <code>chat-proxy.js</code> の中身をそのまま貼り付けて、画面右上の「Deploy」を押します(保存してデプロイされます)。</li>
+  </ol>
+</div>
+
+<h2>Step 4. Workerに設定を追加する</h2>
+<div class="step">
+  <h3 style="margin-top:4px;">4-1. キーと合言葉を登録する</h3>
+  <ol>
+    <li>作成したWorkerの管理画面で、上部タブの「<strong>Settings</strong>」を開きます。<span class="pin">1</span> が「Edit code」、<span class="pin">2</span> が次で使う「Add variable」です。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/cf-04-settings.png" alt="WorkerのSettingsタブ。Edit codeボタンと、Runtime variables and secretsのAdd variableボタン">
+    <figcaption>見出しは「Runtime variables and secrets」です。登録済みのものがここに並びます。</figcaption>
+  </figure>
+
+  <ol start="2">
+    <li><span class="pin">2</span>「Add variable」を押すと「Add environment variable」という小さな画面が出ます。ここで以下の4つを1つずつ追加します。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/cf-05-add-variable.png" alt="Add environment variable のダイアログ。Key欄、Value欄、Secretのチェックボックス、Add 1 variable and deployボタン">
+    <figcaption><span class="pin">1</span> Key に名前、Value に値。<span class="pin">2</span> <strong>「Secret」に必ずチェック</strong>。<span class="pin">3</span> 最後に「Add 1 variable and deploy」。</figcaption>
+  </figure>
+
+  <div class="todo">
+    <strong>ここがいちばん間違えやすいところです。</strong>「Secret」のチェックを入れ忘れると、キーや合言葉が<strong>そのまま読める状態で保存されます</strong>。チェックを入れると、保存後は「Value encrypted」と表示され、中身は誰にも見えなくなります(ご自身にも見えません。変えたいときは上書きします)。
+  </div>
+
+  <ol start="3">
+    <li>追加するのは次の4つです。
+      <ul>
+        <li><code>ANTHROPIC_API_KEY</code> … これより前の手順で取得したAnthropicのAPIキー</li>
+        <li><code>APP_PROXY_TOKEN</code> … アプリとWorkerだけが知っている合言葉。好きな英数字の羅列を自分で決めて入力してください(例:20文字くらいのランダムな文字列)</li>
+        <li><code>LINE_CHANNEL_ACCESS_TOKEN</code> … Step2で控えたチャネルアクセストークン</li>
+        <li><code>LINE_CHANNEL_SECRET</code> … Step2で控えたチャネルシークレット</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h3>4-2. KVストレージ(通知の順番待ち場所)を作る</h3>
+  <p style="font-size:13.5px;">お子様が押したスタンプを、LINEに届くまで一時的に置いておく場所です。左メニューから作ります。</p>
+  <ol start="4">
+    <li>左メニューの「Storage &amp; databases」を開き、<span class="pin">1</span>「Workers KV」を選びます。右上の <span class="pin">2</span>「Create Instance」を押します。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/cf-06-kv-list.png" alt="Workers KVの一覧画面。左メニューのWorkers KVと、右上のCreate Instanceボタン">
+    <figcaption>まだ何も作っていない場合、一覧は空の状態です。</figcaption>
+  </figure>
+
+  <ol start="5">
+    <li><span class="pin">1</span>「Namespace name」に好きな名前を入れて(<strong>名前は何でも構いません</strong>。例:<code>ourhome_kv</code>)、<span class="pin">2</span>「Create」を押します。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/cf-07-kv-create.png" alt="Create a KV namespace ダイアログ。Namespace name欄とCreateボタン">
+    <figcaption>あとで選ぶだけなので、名前は覚えやすいもので大丈夫です。</figcaption>
+  </figure>
+
+  <h3>4-3. WorkerとKVをつなぐ(Bindings)</h3>
+  <p style="font-size:13.5px;">作ったKVを、Workerから使えるように結びつけます。</p>
+  <ol start="6">
+    <li>Workerの管理画面に戻り、<span class="pin">1</span> 上部タブの「Bindings」を開いて、<span class="pin">2</span>「Add binding」を押します。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/cf-08-bindings.png" alt="WorkerのBindingsタブ。Add bindingボタンと、追加済みのKV namespaceの一覧">
+    <figcaption>設定が終わると、下の表に「KV namespace / MOM_QUEUE」の行が出ます。</figcaption>
+  </figure>
+
+  <ol start="7">
+    <li>種類の一覧が出ます。<span class="pin">1</span>「KV namespace」を選んでから、<span class="pin">2</span>「Add Binding」を押します。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/cf-09-binding-type.png" alt="Add a binding ダイアログ。左の一覧からKV namespaceを選んだところ">
+    <figcaption>種類がたくさん並んでいますが、選ぶのは「KV namespace」だけです。</figcaption>
+  </figure>
+
+  <ol start="8">
+    <li><span class="pin">1</span>「Variable name」に <code>MOM_QUEUE</code> と入力します(<strong>つづりはこのとおりに。1文字でも違うと動きません</strong>)。<span class="pin">2</span>「KV namespace」欄で、先ほど作ったKVを選びます。<span class="pin">3</span>「Add Binding」を押して完了です。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/cf-10-binding-form.png" alt="Add a KV namespace binding の画面。Variable name欄にMOM_QUEUE、KV namespaceの選択欄">
+    <figcaption>「Variable name」はプログラムがKVを呼ぶときの名前なので、決まった文字列です。</figcaption>
+  </figure>
+
+  <h3>4-4. 1時間ごとの自動実行(Cron)を追加する</h3>
+  <p style="font-size:13.5px;">予定のリマインドなどを定期的に送るための設定です。</p>
+  <ol start="9">
+    <li>もう一度 <span class="pin">1</span>「Settings」タブを開き、下へスクロールして「Trigger events」の中の「Cron triggers」を探します。<span class="pin">2</span>「+ Add」を押します。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/cf-11-cron.png" alt="SettingsタブのTrigger events内にあるCron triggers。Runs Every hourの行と+Addボタン">
+    <figcaption>設定が終わると、この図のように「Runs / Every hour」と表示されます。</figcaption>
+  </figure>
+
+  <ol start="10">
+    <li>小さな画面が開きます。上部に「<strong>Schedule</strong>」と「<strong>Cron expression</strong>」の切り替えがあります。かんたんなのは「Schedule」のままで、「Execute Worker every」を <strong>Hour(s)</strong> の <strong>1</strong> にする方法です(=1時間ごと)。「Cron expression」に切り替えて <code>0 * * * *</code> と入力しても同じです。最後に「Add」を押します。</li>
+    <li>設定が終わったら、WorkerのURL(<code>https://〇〇.workers.dev</code> の形。「Overview」タブ上部や「Domains and routes」欄に表示されています)を控えておきます(<strong>これが手順5で使う「Worker URL」です</strong>)。</li>
+    <li>LINE Developersコンソールに戻り、「Messaging API設定」の「<strong>Webhook設定</strong>」を開きます。<span class="pin">2</span>「編集」から、<span class="pin">1</span>「Webhook URL」に <code>Worker URLの末尾に/webhookを付けたもの</code>(例: <code>https://〇〇.workers.dev/webhook</code>)を入れて保存し、<span class="pin">3</span>「<strong>Webhookの利用</strong>」をオンにします。</li>
+  </ol>
+
+  <figure>
+    <img src="./img/ln-04-webhook.png" alt="LINE DevelopersのWebhook設定。Webhook URLと編集ボタン、Webhookの利用のスイッチ">
+    <figcaption>「検証」を押して成功が出れば、WorkerとLINEがつながっています。「Webhookの再送」はオフのままで構いません。</figcaption>
+  </figure>
+</div>
+
+<h2>Step 5. アプリに接続情報を入力する</h2>
+<div class="step">
+  <ol>
+    <li>お子様の端末で「まいにちサポート」を開きます。</li>
+    <li>ホーム画面右上の「⚙️」ボタンをタップし、「🔌 通知の接続設定」を開きます。</li>
+    <li>「Worker URL」欄に、Step4で控えたWorkerのURLを入力します。</li>
+    <li>「合言葉(APP_PROXY_TOKEN)」欄に、Step4で自分で決めた合言葉を入力します。</li>
+    <li>「保存する」を押します。「✅ 設定済み」と表示されれば完了です。</li>
+  </ol>
+</div>
+
+<h2>Step 6. お父さん・お母さんを通知の宛先として登録する</h2>
+<div class="step">
+  <p>ここまでの設定だけでは、「誰に」送ればいいかをWorkerがまだ知りません。お父さん・お母さんご本人が、それぞれ一度だけ次の操作をしてください。</p>
+  <ol>
+    <li>Step1で作った公式アカウントを、LINEで「友だち追加」します(QRコードは公式アカウント管理画面の「友だち追加」メニューから取得できます)。</li>
+    <li>その公式アカウントのトーク画面を開き、お父さんは「おとうさん」、お母さんは「おかあさん」とだけ送信します。</li>
+    <li>「登録できたよ！」と返信が来れば完了です。これで、「お母さんだけ」「お父さんだけ」「二人とも」を選んでの通知が届くようになります。</li>
+  </ol>
+</div>
+
+<div class="note">
+これでLINEと通知の設定は完了です。うまく届かない場合は、Step2〜4で控えた値に入力ミスがないか(特にコピペ時の余分な空白・改行)をまずご確認ください。
+</div>
+
+<p style="text-align:center; margin-top:28px;"><a href="./google-setup-guide.html">つづいて手順3「カレンダーの連携」へ →</a></p>
+<p style="text-align:center; font-size:13px;"><a href="./setup-index.html">設定ガイドの目次にもどる</a> ／ <a href="./privacy.html">プライバシーポリシー</a></p>
+
+</body>
+</html>

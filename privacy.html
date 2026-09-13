@@ -36,9 +36,32 @@
     body{font-size:14.5px; padding:24px 16px 48px;}
     th,td{padding:7px 8px;}
   }
+  /* ===== ガイド共通ナビ(トップへ戻る・目次リンク) 2026-09-13 追加 ===== */
+  html{scroll-behavior:smooth;}
+  h2{scroll-margin-top:64px;}
+  .guide-topbar{position:sticky; top:0; z-index:1000; display:flex; align-items:center; gap:10px;
+    background:rgba(250,247,252,0.96); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+    border-bottom:1px solid #E8E0F2; padding:10px 0; margin:0 0 6px; font-size:14px;}
+  .guide-topbar a.gt-back{color:#B93A6B; font-weight:bold; text-decoration:none; white-space:nowrap;}
+  .guide-topbar a.gt-back:hover,.guide-topbar a.gt-back:active{text-decoration:underline;}
+  .guide-topbar .gt-title{color:#7A6B8A; font-size:12.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .back-to-top{position:fixed; right:16px; bottom:16px; z-index:1000; width:48px; height:48px; padding:0;
+    border:none; border-radius:50%; background:#E8467C; color:#fff; font-size:22px; line-height:48px;
+    box-shadow:0 3px 10px rgba(74,58,91,0.3); cursor:pointer; opacity:0; visibility:hidden;
+    transition:opacity .25s, visibility .25s;}
+  .back-to-top.show{opacity:.92; visibility:visible;}
+  .back-to-top:hover{opacity:1;}
+  .overview-toc a{color:#4A3A5B; text-decoration:none; border-bottom:1px dotted #C9A8DE;}
+  .overview-toc a:hover,.overview-toc a:active{color:#B93A6B; border-bottom-color:#B93A6B;}
+  @media (max-width:520px){ .back-to-top{width:44px; height:44px; line-height:44px; font-size:20px;} }
 </style>
 </head>
 <body>
+<div class="guide-topbar">
+  <a class="gt-back" href="./setup-index.html">← 設定ガイドの目次</a>
+  <span class="gt-title">プライバシーポリシー</span>
+</div>
+
 
 <header>
   <h1>プライバシーポリシー</h1>
@@ -154,5 +177,17 @@
   <p>まいにちサポート ／ <a href="./">つかいかたガイドへ戻る</a></p>
 </footer>
 
+
+<button class="back-to-top" aria-label="ページの先頭にもどる" onclick="window.scrollTo({top:0,behavior:'smooth'});">↑</button>
+<script>
+(function(){
+  var b=document.querySelector('.back-to-top');
+  if(!b) return;
+  function u(){ ((window.pageYOffset||document.documentElement.scrollTop) > window.innerHeight*1.1) ? b.classList.add('show') : b.classList.remove('show'); }
+  window.addEventListener('scroll',u,{passive:true});
+  window.addEventListener('resize',u,{passive:true});
+  u();
+})();
+</script>
 </body>
 </html>

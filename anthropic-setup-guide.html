@@ -28,9 +28,32 @@
        background:#E8467C; color:#fff; font-size:12px; font-weight:bold; vertical-align:-3px; margin:0 2px;}
   @media (max-width:520px){ th{white-space:normal;} table{font-size:12.5px;} }
   @media (max-width:520px){ body{font-size:14.5px; padding:24px 16px 48px;} th,td{padding:7px 8px;} }
+  /* ===== ガイド共通ナビ(トップへ戻る・目次リンク) 2026-09-13 追加 ===== */
+  html{scroll-behavior:smooth;}
+  h2{scroll-margin-top:64px;}
+  .guide-topbar{position:sticky; top:0; z-index:1000; display:flex; align-items:center; gap:10px;
+    background:rgba(250,247,252,0.96); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+    border-bottom:1px solid #E8E0F2; padding:10px 0; margin:0 0 6px; font-size:14px;}
+  .guide-topbar a.gt-back{color:#B93A6B; font-weight:bold; text-decoration:none; white-space:nowrap;}
+  .guide-topbar a.gt-back:hover,.guide-topbar a.gt-back:active{text-decoration:underline;}
+  .guide-topbar .gt-title{color:#7A6B8A; font-size:12.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .back-to-top{position:fixed; right:16px; bottom:16px; z-index:1000; width:48px; height:48px; padding:0;
+    border:none; border-radius:50%; background:#E8467C; color:#fff; font-size:22px; line-height:48px;
+    box-shadow:0 3px 10px rgba(74,58,91,0.3); cursor:pointer; opacity:0; visibility:hidden;
+    transition:opacity .25s, visibility .25s;}
+  .back-to-top.show{opacity:.92; visibility:visible;}
+  .back-to-top:hover{opacity:1;}
+  .overview-toc a{color:#4A3A5B; text-decoration:none; border-bottom:1px dotted #C9A8DE;}
+  .overview-toc a:hover,.overview-toc a:active{color:#B93A6B; border-bottom-color:#B93A6B;}
+  @media (max-width:520px){ .back-to-top{width:44px; height:44px; line-height:44px; font-size:20px;} }
 </style>
 </head>
 <body>
+<div class="guide-topbar">
+  <a class="gt-back" href="./setup-index.html">← 設定ガイドの目次</a>
+  <span class="gt-title">AIチャットの準備</span>
+</div>
+
 
 <h1>💬 AIチャット(チャチャ)の準備をする</h1>
 <p>「まいにちサポート」のそうだんチャットは、お子様の話し相手になるAIです。このAIを動かすために、<strong>ご家庭専用の「APIキー」</strong>を1つご用意いただきます。だいたい10分ほどの作業です。クレジットカードをお手元にご用意ください。</p>
@@ -46,14 +69,14 @@
 </div>
 
 <h2>この作業で何をするか(全体像)</h2>
-<ol>
-  <li>Claudeのコンソール(開発者向けの管理画面)にアカウントを作る</li>
-  <li>クレジットを購入する(最低5ドルから)</li>
-  <li>使いすぎ防止の「上限」を設定する</li>
-  <li>APIキーを発行して、控えておく</li>
+<ol class="overview-toc">
+  <li><a href="#step1">Claudeのコンソール(開発者向けの管理画面)にアカウントを作る</a></li>
+  <li><a href="#step2">クレジットを購入する(最低5ドルから)</a></li>
+  <li><a href="#step3">使いすぎ防止の「上限」を設定する</a></li>
+  <li><a href="#step4">APIキーを発行して、控えておく</a></li>
 </ol>
 
-<h2>Step 1. アカウントを作る</h2>
+<h2 id="step1">Step 1. アカウントを作る</h2>
 <div class="step">
   <ol>
     <li><a href="https://platform.claude.com/" target="_blank" rel="noopener">platform.claude.com</a> を開きます(以前の <code>console.anthropic.com</code> は、こちらに自動で切り替わります)。</li>
@@ -63,7 +86,7 @@
   <p style="font-size:13.5px; margin-bottom:0;">※これは、ふだんチャットで使う「Claude」のアカウントとは別の、<strong>開発者向けの管理画面</strong>です。見慣れない画面ですが、使うのは最初の設定のときだけです。</p>
 </div>
 
-<h2>Step 2. クレジットを購入する</h2>
+<h2 id="step2">Step 2. クレジットを購入する</h2>
 <div class="step">
   <p style="margin-top:0;">このサービスは<strong>月額制ではなく、前払いのチャージ制</strong>です。買ったぶんだけ使え、使い切るまで追加の請求は発生しません。</p>
   <ol>
@@ -100,7 +123,7 @@
 <strong>消費税がかかります。</strong>購入画面に「推定税額」として10%が上乗せされるため、$5 のクレジットを買うと支払いは <strong>$5.50</strong> になります($20 なら $22.00)。残高に入るのは $5 ぶんです。
 </div>
 
-<h2>Step 3. 使いすぎ防止の上限を設定する(おすすめ)</h2>
+<h2 id="step3">Step 3. 使いすぎ防止の上限を設定する(おすすめ)</h2>
 <div class="step">
   <p style="margin-top:0;">「知らないうちに高額になっていたら怖い」という不安を、設定でなくしておきましょう。</p>
   <ol>
@@ -117,7 +140,7 @@
   <p style="margin-bottom:0;">前払い制なので、そもそもチャージした金額を超えて使われることはありません。上限設定は、その上でのもう一段の安心材料です。</p>
 </div>
 
-<h2>Step 4. APIキーを発行する</h2>
+<h2 id="step4">Step 4. APIキーを発行する</h2>
 <div class="step">
   <ol>
     <li>左のメニューから <span class="pin">1</span>「<strong>APIキー</strong>」を開き、右上の <span class="pin">2</span>「<strong>キーを作成</strong>」を押します。</li>
@@ -213,5 +236,17 @@
 
 <p style="text-align:center; font-size:13px; margin-top:24px;"><a href="./setup-index.html">設定ガイドの目次にもどる</a> ／ <a href="./privacy.html">プライバシーポリシー</a></p>
 
+
+<button class="back-to-top" aria-label="ページの先頭にもどる" onclick="window.scrollTo({top:0,behavior:'smooth'});">↑</button>
+<script>
+(function(){
+  var b=document.querySelector('.back-to-top');
+  if(!b) return;
+  function u(){ ((window.pageYOffset||document.documentElement.scrollTop) > window.innerHeight*1.1) ? b.classList.add('show') : b.classList.remove('show'); }
+  window.addEventListener('scroll',u,{passive:true});
+  window.addEventListener('resize',u,{passive:true});
+  u();
+})();
+</script>
 </body>
 </html>

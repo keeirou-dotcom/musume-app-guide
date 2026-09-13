@@ -31,9 +31,32 @@
        background:#E8467C; color:#fff; font-size:12px; font-weight:bold; vertical-align:-3px; margin:0 2px;}
   @media (max-width:520px){ th{white-space:normal;} table{font-size:12.5px;} }
   
+  /* ===== ガイド共通ナビ(トップへ戻る・目次リンク) 2026-09-13 追加 ===== */
+  html{scroll-behavior:smooth;}
+  h2{scroll-margin-top:64px;}
+  .guide-topbar{position:sticky; top:0; z-index:1000; display:flex; align-items:center; gap:10px;
+    background:rgba(250,247,252,0.96); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+    border-bottom:1px solid #E8E0F2; padding:10px 0; margin:0 0 6px; font-size:14px;}
+  .guide-topbar a.gt-back{color:#B93A6B; font-weight:bold; text-decoration:none; white-space:nowrap;}
+  .guide-topbar a.gt-back:hover,.guide-topbar a.gt-back:active{text-decoration:underline;}
+  .guide-topbar .gt-title{color:#7A6B8A; font-size:12.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .back-to-top{position:fixed; right:16px; bottom:16px; z-index:1000; width:48px; height:48px; padding:0;
+    border:none; border-radius:50%; background:#E8467C; color:#fff; font-size:22px; line-height:48px;
+    box-shadow:0 3px 10px rgba(74,58,91,0.3); cursor:pointer; opacity:0; visibility:hidden;
+    transition:opacity .25s, visibility .25s;}
+  .back-to-top.show{opacity:.92; visibility:visible;}
+  .back-to-top:hover{opacity:1;}
+  .overview-toc a{color:#4A3A5B; text-decoration:none; border-bottom:1px dotted #C9A8DE;}
+  .overview-toc a:hover,.overview-toc a:active{color:#B93A6B; border-bottom-color:#B93A6B;}
+  @media (max-width:520px){ .back-to-top{width:44px; height:44px; line-height:44px; font-size:20px;} }
 </style>
 </head>
 <body>
+<div class="guide-topbar">
+  <a class="gt-back" href="./setup-index.html">← 設定ガイドの目次</a>
+  <span class="gt-title">カレンダーの連携</span>
+</div>
+
 
 <h1>📅 Googleカレンダーをアプリにつなぐ</h1>
 <p>設定の最後、3番目の手順です。お子様の端末の「まいにちサポート」に、ご家庭のGoogleカレンダーの予定を表示するための設定です。ここでする作業は<strong>3つだけ</strong>で、だいたい5分ほどで終わります。むずかしい登録や、新しいアカウントの作成は必要ありません。</p>
@@ -43,14 +66,14 @@
 </div>
 
 <h2>この作業で何をするか(全体像)</h2>
-<ol>
-  <li>アプリの中で、ふだんお使いのGoogleアカウントでログインする</li>
-  <li>どのカレンダーの予定を表示するかを決める</li>
-  <li>「そうだんチャットのふりかえり」を送るメールアドレスを入れる</li>
+<ol class="overview-toc">
+  <li><a href="#step1">アプリの中で、ふだんお使いのGoogleアカウントでログインする</a></li>
+  <li><a href="#step2">どのカレンダーの予定を表示するかを決める</a></li>
+  <li><a href="#step3">「そうだんチャットのふりかえり」を送るメールアドレスを入れる</a></li>
 </ol>
 <p style="font-size:13.5px;">お手元に、<strong>お子様の端末</strong>と、ご家庭で予定を管理している<strong>Googleアカウント(Gmailのアドレスとパスワード)</strong>をご用意ください。</p>
 
-<h2>Step 1. アプリでGoogleにログインする</h2>
+<h2 id="step1">Step 1. アプリでGoogleにログインする</h2>
 <div class="step">
   <ol>
     <li>お子様の端末で「まいにちサポート」を開きます。</li>
@@ -126,7 +149,7 @@
 <p>内容を確認したら「<strong>続行</strong>」(または「許可」)を押してください。カレンダー画面に戻り、予定が読み込まれれば連携は完了です。</p>
 <p style="font-size:13.5px; color:#655674;">※画面の表記はGoogle側の都合で変わることがあります。ボタンの名前が違っても、上の3つ以外の権限を求められることはありません。もし見慣れない権限が出た場合は、進めずに開発者までご連絡ください。</p>
 
-<h2>Step 2. 表示するカレンダーを決める</h2>
+<h2 id="step2">Step 2. 表示するカレンダーを決める</h2>
 <div class="step">
   <p style="margin-top:0;">アプリは最初、<strong>いまログインしたご本人のカレンダー</strong>の予定を表示するようになっています。ご家庭の予定をそのアカウントで管理されている場合は、<strong>この手順はとばして構いません</strong>。</p>
   <p>ご家族で「共有カレンダー」を作って予定を管理している場合だけ、次の設定をしてください。</p>
@@ -176,7 +199,7 @@
   <strong>大切な確認:</strong> 共有カレンダーの予定を表示するには、<strong>Step 1でログインしたGoogleアカウントが、そのカレンダーを見られる状態</strong>になっている必要があります。まだ共有していない場合は、Googleカレンダーの「設定と共有」→「特定のユーザーとの共有」から、そのアカウントを追加しておいてください(権限は「予定の表示(すべての予定の詳細)」で十分です)。
 </div>
 
-<h2>Step 3. ふりかえりの送り先を入れる</h2>
+<h2 id="step3">Step 3. ふりかえりの送り先を入れる</h2>
 <div class="step">
   <p style="margin-top:0;">「そうだんチャットのふりかえり」は、お子様がAIと話した内容を、あとから保護者の方が読み返せるようにメールで送る機能です。その<strong>送り先のメールアドレス</strong>を登録します。</p>
   <ol>
@@ -212,5 +235,17 @@
 
 <p style="text-align:center; margin-top:28px;"><a href="./setup-index.html">← 設定ガイドの目次にもどる</a></p>
 
+
+<button class="back-to-top" aria-label="ページの先頭にもどる" onclick="window.scrollTo({top:0,behavior:'smooth'});">↑</button>
+<script>
+(function(){
+  var b=document.querySelector('.back-to-top');
+  if(!b) return;
+  function u(){ ((window.pageYOffset||document.documentElement.scrollTop) > window.innerHeight*1.1) ? b.classList.add('show') : b.classList.remove('show'); }
+  window.addEventListener('scroll',u,{passive:true});
+  window.addEventListener('resize',u,{passive:true});
+  u();
+})();
+</script>
 </body>
 </html>

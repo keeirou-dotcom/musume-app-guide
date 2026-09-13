@@ -194,6 +194,38 @@
     .feature-eyebrow{ margin-left:auto; margin-right:auto; }
     .tag-row{ justify-content:center; }
   }
+  /* ===== どこからでも開ける きのうメニュー(2026-09-13 追加) ===== */
+  html{scroll-behavior:smooth;}
+  section.feature{scroll-margin-top:16px;}
+  .jump-fab{position:fixed; right:16px; bottom:16px; z-index:1200; display:inline-flex; align-items:center; gap:6px;
+    border:none; cursor:pointer; font-family:inherit; padding:13px 20px; border-radius:999px;
+    background:var(--coral); color:#fff; font-size:15px; font-weight:800;
+    box-shadow:0 6px 18px rgba(199,68,119,0.42); opacity:0; visibility:hidden; transform:translateY(10px);
+    transition:opacity .25s ease, transform .25s ease, visibility .25s ease;}
+  .jump-fab.show{opacity:1; visibility:visible; transform:none;}
+  .jump-fab:hover{transform:translateY(-2px);}
+  .jump-overlay{position:fixed; inset:0; z-index:1300; background:rgba(74,58,91,0.45);
+    -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px);
+    display:flex; align-items:flex-end; justify-content:center;
+    opacity:0; visibility:hidden; transition:opacity .25s ease, visibility .25s ease;}
+  .jump-overlay.open{opacity:1; visibility:visible;}
+  .jump-sheet{width:100%; max-width:520px; max-height:82vh; overflow-y:auto;
+    background:var(--card); border-radius:28px 28px 0 0;
+    padding:18px 18px calc(20px + env(safe-area-inset-bottom,0px));
+    box-shadow:0 -10px 30px rgba(90,74,107,0.28);
+    transform:translateY(100%); transition:transform .28s ease;}
+  .jump-overlay.open .jump-sheet{transform:none;}
+  .jump-sheet-head{display:flex; align-items:center; justify-content:space-between; margin:2px 2px 14px;}
+  .jump-sheet-head .js-title{font-size:15px; font-weight:800; color:var(--coral-deep);}
+  .jump-sheet-head .js-close{border:none; background:var(--lavender-light); color:var(--plum);
+    width:40px; height:40px; border-radius:50%; font-size:18px; cursor:pointer; font-family:inherit; line-height:1;}
+  .jump-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .jump-grid a{display:flex; align-items:center; gap:8px; text-decoration:none;
+    background:var(--lavender-light); color:var(--plum); font-weight:700; font-size:14px; line-height:1.3;
+    padding:15px 14px; border-radius:16px; min-height:22px;}
+  .jump-grid a:hover{transform:translateY(-1px);}
+  .jump-grid a.js-top{grid-column:1 / -1; background:var(--peach-light); color:var(--coral-deep); justify-content:center; font-weight:800;}
+  @media (max-width:380px){ .jump-grid{grid-template-columns:1fr;} }
 </style>
 </head>
 <body>
@@ -351,5 +383,48 @@
   <p class="outro-links"><a href="./setup-index.html">はじめての設定ガイド</a> ／ <a href="./privacy.html">プライバシーポリシー</a></p>
 </footer>
 
+
+<button class="jump-fab" id="jumpFab" aria-haspopup="dialog" aria-label="きのうメニューをひらく">☰ めにゅー</button>
+<div class="jump-overlay" id="jumpOverlay" role="dialog" aria-modal="true" aria-label="きのうメニュー">
+  <div class="jump-sheet">
+    <div class="jump-sheet-head">
+      <span class="js-title">🌸 みたい きのうを えらんでね</span>
+      <button class="js-close" id="jumpClose" aria-label="とじる">✕</button>
+    </div>
+    <div class="jump-grid" id="jumpGrid"></div>
+  </div>
+</div>
+<script>
+(function(){
+  var fab=document.getElementById('jumpFab'),
+      ov=document.getElementById('jumpOverlay'),
+      grid=document.getElementById('jumpGrid'),
+      closeBtn=document.getElementById('jumpClose');
+  if(!fab||!ov||!grid) return;
+  function close(){ ov.classList.remove('open'); }
+  function open(){ ov.classList.add('open'); }
+  // 「いちばん上へ」
+  var top=document.createElement('a');
+  top.href='#'; top.className='js-top'; top.textContent='▲ いちばん上へ';
+  top.addEventListener('click',function(e){ e.preventDefault(); close(); window.scrollTo({top:0,behavior:'smooth'}); });
+  grid.appendChild(top);
+  // 上の目次(nav.toc)のリンクから12機能ボタンを生成
+  Array.prototype.forEach.call(document.querySelectorAll('nav.toc a'), function(a){
+    var b=document.createElement('a');
+    b.href=a.getAttribute('href');
+    b.textContent=a.textContent.trim();
+    b.addEventListener('click', close);
+    grid.appendChild(b);
+  });
+  fab.addEventListener('click', open);
+  closeBtn.addEventListener('click', close);
+  ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+  function upd(){ ((window.pageYOffset||document.documentElement.scrollTop) > window.innerHeight*0.8) ? fab.classList.add('show') : fab.classList.remove('show'); }
+  window.addEventListener('scroll', upd, {passive:true});
+  window.addEventListener('resize', upd, {passive:true});
+  upd();
+})();
+</script>
 </body>
 </html>

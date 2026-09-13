@@ -37,6 +37,29 @@
   .overview-toc a{color:#4A3A5B; text-decoration:none; border-bottom:1px dotted #C9A8DE;}
   .overview-toc a:hover,.overview-toc a:active{color:#B93A6B; border-bottom-color:#B93A6B;}
   @media (max-width:520px){ .back-to-top{width:44px; height:44px; line-height:44px; font-size:20px;} }
+  /* ===== ガイド仕上げ D:進捗 / E:画像拡大 / F:折りたたみ (2026-09-13) ===== */
+  /* D 進捗 */
+  .guide-topbar .gt-title{flex:0 1 auto; min-width:0;}
+  .gt-progress{flex:0 0 auto; margin-left:auto; font-size:12px; font-weight:700; color:#B93A6B;
+    white-space:nowrap; background:#FCEBF1; padding:3px 11px; border-radius:999px;}
+  @media (max-width:400px){ .guide-topbar .gt-title{display:none;} }
+  /* F 折りたたみ */
+  h2.collapsible{cursor:pointer; position:relative; padding-right:36px; -webkit-user-select:none; user-select:none;}
+  h2.collapsible::after{content:"\25BC"; position:absolute; right:14px; top:50%; transform:translateY(-50%);
+    font-size:11px; color:#8a7a9a; transition:transform .2s;}
+  h2.collapsible.collapsed::after{transform:translateY(-50%) rotate(-90deg);}
+  h2.collapsible .done-badge{display:none; margin-left:8px; font-size:12px; color:#2B7350; font-weight:700;}
+  h2.collapsible.collapsed .done-badge{display:inline;}
+  .step-hidden{display:none !important;}
+  /* E ライトボックス */
+  figure img, .feature-shot img{cursor:zoom-in;}
+  .lightbox{position:fixed; inset:0; z-index:2000; background:rgba(30,22,38,0.92);
+    display:flex; align-items:center; justify-content:center; padding:20px; cursor:zoom-out;
+    opacity:0; visibility:hidden; transition:opacity .2s ease, visibility .2s ease;}
+  .lightbox.open{opacity:1; visibility:visible;}
+  .lightbox img{max-width:100%; max-height:100%; border-radius:10px; box-shadow:0 10px 40px rgba(0,0,0,0.5);}
+  .lightbox .lb-close{position:absolute; top:14px; right:16px; width:44px; height:44px; border:none;
+    border-radius:50%; background:rgba(255,255,255,0.92); color:#4A3A5B; font-size:20px; cursor:pointer; font-family:inherit;}
 </style>
 </head>
 <body>
@@ -286,6 +309,79 @@
   window.addEventListener('scroll',u,{passive:true});
   window.addEventListener('resize',u,{passive:true});
   u();
+})();
+</script>
+
+<script>
+/* ガイド仕上げ D:進捗 / E:画像拡大 / F:折りたたみ */
+(function(){
+  var steps = Array.prototype.slice.call(document.querySelectorAll('h2[id^="step"]'));
+  var bar = document.querySelector('.guide-topbar');
+
+  // D: Step N / M
+  if(steps.length && bar){
+    var prog = document.createElement('span');
+    prog.className = 'gt-progress';
+    bar.appendChild(prog);
+    var cur = 0;
+    function updProg(){
+      var y = (window.pageYOffset||document.documentElement.scrollTop||0) + 90;
+      var idx = 1;
+      for(var i=0;i<steps.length;i++){ if(steps[i].getBoundingClientRect().top + window.pageYOffset <= y) idx = i+1; }
+      if(idx !== cur){ cur = idx; prog.textContent = 'Step ' + idx + ' / ' + steps.length; }
+    }
+    window.addEventListener('scroll', updProg, {passive:true});
+    window.addEventListener('resize', updProg, {passive:true});
+    updProg();
+  }
+
+  // F: 完了ステップの折りたたみ
+  var LSKEY = 'guide_collapsed_' + location.pathname;
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(LSKEY) || '{}') || {}; }catch(e){}
+  function save(){ try{ localStorage.setItem(LSKEY, JSON.stringify(saved)); }catch(e){} }
+  function groupOf(h){ var g=[], el=h.nextElementSibling; while(el && el.tagName!=='H2'){ g.push(el); el=el.nextElementSibling; } return g; }
+  steps.forEach(function(h){
+    var group = groupOf(h);
+    if(!group.length) return;
+    h.classList.add('collapsible');
+    h.setAttribute('role','button'); h.setAttribute('tabindex','0');
+    var badge = document.createElement('span');
+    badge.className='done-badge'; badge.textContent='✓ できた（タップでひらく）';
+    h.appendChild(badge);
+    function apply(c){ h.classList.toggle('collapsed', c); group.forEach(function(g){ g.classList.toggle('step-hidden', c); }); }
+    function toggle(){ var c=!h.classList.contains('collapsed'); apply(c); saved[h.id]=c; save(); }
+    h.addEventListener('click', toggle);
+    h.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(); } });
+    apply(!!saved[h.id]);
+  });
+  function expandTarget(){
+    var id = location.hash.slice(1); if(!id) return;
+    var h = document.getElementById(id);
+    if(h && h.classList.contains('collapsed')){
+      h.classList.remove('collapsed');
+      groupOf(h).forEach(function(g){ g.classList.remove('step-hidden'); });
+      saved[id]=false; save();
+    }
+  }
+  window.addEventListener('hashchange', expandTarget);
+  setTimeout(expandTarget, 0);
+
+  // E: 画像タップで拡大
+  var imgs = document.querySelectorAll('figure img, .feature-shot img');
+  if(imgs.length){
+    var lb = document.createElement('div');
+    lb.className='lightbox';
+    lb.innerHTML='<button class="lb-close" aria-label="とじる">✕</button><img alt="">';
+    document.body.appendChild(lb);
+    var lbImg = lb.querySelector('img');
+    function close(){ lb.classList.remove('open'); lbImg.removeAttribute('src'); }
+    Array.prototype.forEach.call(imgs, function(im){
+      im.addEventListener('click', function(){ lbImg.src = im.currentSrc||im.src; lbImg.alt = im.alt||''; lb.classList.add('open'); });
+    });
+    lb.addEventListener('click', close);
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+  }
 })();
 </script>
 </body>
